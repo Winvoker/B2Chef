@@ -1,0 +1,7 @@
+flask
+requests
+gradio
+pydantic
+python-dotenv
+google-generativeai
+openai
