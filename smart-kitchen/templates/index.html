@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fridge List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h1>𝕭𝖊𝖗𝖋𝖎𝖓 𝖛𝖊 𝕭𝖆𝖙𝖚𝖓𝖚𝖓 𝕯𝖔𝖑𝖆𝖇𝖎</h1>
+
+    <div class="container">
+        <div class="add-form" style="border: 1px solid #ccc; padding: 20px; margin-bottom: 20px;">
+            <h2>Add Item</h2>
+            <input type="text" id="item-name" placeholder="Item Name" style="width: 100%;" autocomplete="off">
+            <select id="item-category" style="width: 100%;">
+                {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+            <div style="text-align: center; margin-top: 10px;">
+                <button id="add-button">Add</button>
+            </div>
+            <!-- <button id="update-migros-button" style="margin-top: 20px; width: 100%;">Update Migros Data</button> -->
+        </div>
+
+        <div class="item-lists">
+            {% for category, items in items.items() %}
+            <div class="item-list">
+                <h2>{{ category }}</h2>
+                <ul>
+                    {% for item in items %}
+                    <li>
+                        <span>{{ item }}</span>
+                        <button class="remove-button" data-category="{{ category }}"
+                            data-name="{{ item }}">Remove</button>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <button class="remove-all-button" data-category="{{ category }}">Remove All</button>
+            </div>
+            {% endfor %}
+            {% for i in range(3 - (items|length % 3)) %}
+            <div class="item-list" style="visibility: hidden;"></div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        const addButton = document.getElementById("add-button");
+        const itemNameInput = document.getElementById("item-name");
+        const itemCategorySelect = document.getElementById("item-category");
+        const updateMigrosButton = document.getElementById("update-migros-button");
+
+        addButton.addEventListener("click", () => {
+            const itemName = itemNameInput.value;
+            const itemCategory = itemCategorySelect.value;
+
+            fetch("/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name: itemName, category: itemCategory })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        location.reload(); // Refresh the page to update the list
+                    } else {
+                        alert("Error adding item.");
+                    }
+                });
+        });
+
+        document.addEventListener("click", (event) => {
+            if (event.target.classList.contains("remove-button")) {
+                const itemName = event.target.dataset.name;
+                const itemCategory = event.target.dataset.category;
+
+                fetch("/remove", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name: itemName, category: itemCategory })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            location.reload(); // Refresh the page to update the list
+                        } else {
+                            alert("Error removing item.");
+                        }
+                    });
+            } else if (event.target.classList.contains("remove-all-button")) {
+                const itemCategory = event.target.dataset.category;
+
+                fetch("/remove_all", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ category: itemCategory })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            location.reload(); // Refresh the page to update the list
+                        } else {
+                            alert("Error removing all items.");
+                        }
+                    });
+            }
+        });
+
+        updateMigrosButton.addEventListener("click", () => {
+            fetch("/update_migros", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        location.reload(); // Refresh the page to update the list
+                    } else {
+                        alert("Error updating Migros data.");
+                    }
+                });
+        });
+    </script>
+</body>
+
+</html>

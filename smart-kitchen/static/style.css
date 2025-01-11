@@ -1,0 +1,184 @@
+:root {
+    --scale-factor: 1; /* Default scale factor */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: calc(20px * var(--scale-factor));
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    font-size: calc(2em * var(--scale-factor));
+}
+
+h2, h3 {
+    color: #555;
+    text-align: center;
+    font-size: calc(1.5em * var(--scale-factor));
+}
+
+.container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: calc(80px * var(--scale-factor)); /* Adjust gap between add-form and item-lists */
+}
+
+.add-form {
+    flex: 0 0 calc(200px * var(--scale-factor)); /* Adjust width for the add-form */
+    background-color: #e0f7fa; /* Distinct background color */
+    border: calc(1px * var(--scale-factor)) solid #00796b; /* Border color */
+    padding: calc(15px * var(--scale-factor)); /* Adjust padding */
+    border-radius: calc(5px * var(--scale-factor));
+    box-shadow: 0 0 calc(10px * var(--scale-factor)) rgba(0, 0, 0, 0.1);
+}
+
+.item-lists {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(16px * var(--scale-factor)); /* Adjust gap between item lists */
+}
+
+.item-list {
+    background-color: #fff;
+    border: calc(1px * var(--scale-factor)) solid #ccc;
+    padding: calc(12px * var(--scale-factor)); /* Adjust padding */
+    border-radius: calc(5px * var(--scale-factor));
+    box-shadow: 0 0 calc(10px * var(--scale-factor)) rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(33.333% - calc(16px * var(--scale-factor))); /* Ensure each item list takes up one-third of the container width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+input[type="text"], select {
+    padding: calc(12px * var(--scale-factor)); /* Adjust padding */
+    margin-bottom: calc(10px * var(--scale-factor)); /* Adjust margin */
+    width: 150%; /* Ensure both input and select boxes are the same width */
+    border: calc(1px * var(--scale-factor)) solid #ccc;
+    border-radius: calc(5px * var(--scale-factor));
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+button {
+    padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor)); /* Adjust padding */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: calc(5px * var(--scale-factor));
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.remove-button {
+    background-color: #f44336;
+    margin-left: calc(8px * var(--scale-factor)); /* Adjust margin */
+    font-size: calc(10px * var(--scale-factor)); /* Adjust font size */
+}
+
+.remove-all-button {
+    background-color: #ff9800;
+    margin-top: calc(8px * var(--scale-factor)); /* Adjust margin */
+    font-size: calc(12px * var(--scale-factor)); /* Adjust font size */
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc(8px * var(--scale-factor)); /* Adjust gap between items */
+}
+
+li {
+    display: flex;
+    justify-content: space-between; /* Align remove buttons to the right */
+    align-items: center;
+    padding: calc(4px * var(--scale-factor)); /* Adjust padding */
+    border-bottom: calc(1px * var(--scale-factor)) solid #eee; /* Add bottom border */
+    background-color: #f9f9f9; /* Light background color for items */
+    border-radius: calc(5px * var(--scale-factor));
+    box-shadow: 0 0 calc(5px * var(--scale-factor)) rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.category-container {
+    display: flex;
+    flex-direction: column;
+    gap: calc(16px * var(--scale-factor)); /* Adjust gap */
+}
+
+.category {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    body {
+        margin: calc(10px * var(--scale-factor));
+    }
+
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: calc(20px * var (--scale-factor));
+    }
+
+    .add-form {
+        width: 100%;
+        max-width: calc(300px * var(--scale-factor));
+    }
+
+    .item-lists {
+        flex-direction: column;
+        align-items: center;
+        gap: calc(20px * var(--scale-factor));
+    }
+
+    .item-list {
+        width: 100%;
+        max-width: calc(300px * var(--scale-factor));
+    }
+
+    input[type="text"], select {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: calc(1.5em * var(--scale-factor));
+    }
+
+    h2, h3 {
+        font-size: calc(1.2em * var(--scale-factor));
+    }
+
+    button {
+        font-size: calc(1em * var(--scale-factor));
+    }
+
+    .remove-button, .remove-all-button {
+        font-size: calc(0.8em * var(--scale-factor));
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        gap: calc(10px * var(--scale-factor));
+    }
+
+    .add-form {
+        padding: calc(10px * var(--scale-factor));
+    }
+
+    .item-list {
+        padding: calc(10px * var(--scale-factor));
+    }
+
+    button {
+        padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
+    }
+}

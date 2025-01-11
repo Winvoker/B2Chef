@@ -1,0 +1,41 @@
+{
+    "Sebzeler": [
+        "Havuç",
+        "Marul",
+        "Domates",
+        "biber",
+        "kırmızı biber"
+    ],
+    "Et": [
+        "tavuk",
+        "ton balığı"
+    ],
+    "Baklagil": [
+        "Nohut",
+        "Kuru Fasulye",
+        "Yeşil Mercimek"
+    ],
+    "Meyveler": [
+        "Elma"
+    ],
+    "Süt Ürünleri": [
+        "Süt",
+        "Yoğurt",
+        "süzme yoğurt"
+    ],
+    "Baharat": [
+        "sumak",
+        "isot",
+        "köri",
+        "Zerdeçal",
+        "Toz Acı Biber",
+        "karabiber"
+    ],
+    "İçecekler": [
+        "Kola"
+    ],
+    "Tahıllar": [
+        "Pirinç",
+        "Bulgur"
+    ]
+}

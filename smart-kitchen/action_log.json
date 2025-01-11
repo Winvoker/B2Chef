@@ -1,0 +1,278 @@
+[
+    {
+        "timestamp": "2025-01-09T18:18:32.660033",
+        "action": "added",
+        "item_name": "123",
+        "item_category": "Sebzeler"
+    },
+    {
+        "timestamp": "2025-01-09T18:23:05.530098",
+        "action": "added",
+        "item_name": "Biber Sivri Kg",
+        "item_category": "Mevsim Sebzeleri"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.962990",
+        "action": "added",
+        "item_name": "Biber Kırmızı Kg",
+        "item_category": "Mevsim Sebzeleri"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.963499",
+        "action": "added",
+        "item_name": "Turp Kırmızı Kg",
+        "item_category": "Otlar, Yeşillikler"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.968564",
+        "action": "added",
+        "item_name": "Semizotu Adet",
+        "item_category": "Otlar, Yeşillikler"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.973226",
+        "action": "added",
+        "item_name": "Tikveşli %18 Yağlı Krema 200 Ml",
+        "item_category": "Krema ve Sos"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.978114",
+        "action": "added",
+        "item_name": "Ecco Yeşil Dünya Havlu 6'lı",
+        "item_category": "Kağıt Havlu"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.983144",
+        "action": "added",
+        "item_name": "Soğan Taze Demet",
+        "item_category": "Otlar, Yeşillikler"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.987231",
+        "action": "added",
+        "item_name": "Portakal Sıkma File Kg",
+        "item_category": "Narenciye"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.991859",
+        "action": "added",
+        "item_name": "Sanal Market Plastik Poşeti Turuncu 58x55",
+        "item_category": "Plastik Poşet"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:47.996376",
+        "action": "added",
+        "item_name": "Muz Yerli Kg",
+        "item_category": "Egzotik Meyveler"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.000843",
+        "action": "added",
+        "item_name": "Migros %7 Yağlı Süzme Yoğurt 900 G",
+        "item_category": "Süzme, Çeşnili Yoğurt"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.005239",
+        "action": "added",
+        "item_name": "Uzman Kasap Izgara Köfte 320 G",
+        "item_category": "Dana Eti"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.010646",
+        "action": "added",
+        "item_name": "Greyfurt Kan Kg",
+        "item_category": "Narenciye"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.014195",
+        "action": "added",
+        "item_name": "Migros %3 Yağlı Uht Süt 1L",
+        "item_category": "Uzun Ömürlü Süt"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.019215",
+        "action": "added",
+        "item_name": "Torku Yarım Yağlı Süt 1 L",
+        "item_category": "Uzun Ömürlü Süt"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.024020",
+        "action": "added",
+        "item_name": "Domates Salkım Kg",
+        "item_category": "Mevsim Sebzeleri"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.029219",
+        "action": "added",
+        "item_name": "Hıyar Badem Paket Kg",
+        "item_category": "Mevsim Sebzeleri"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.033648",
+        "action": "added",
+        "item_name": "Ispanak Kg",
+        "item_category": "Otlar, Yeşillikler"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.037932",
+        "action": "added",
+        "item_name": "Bağdat Toz Acı Biber 75 G",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.042716",
+        "action": "added",
+        "item_name": "Salata Kıvırcık Adet",
+        "item_category": "Otlar, Yeşillikler"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.047362",
+        "action": "added",
+        "item_name": "Roka Demet",
+        "item_category": "Otlar, Yeşillikler"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.051737",
+        "action": "added",
+        "item_name": "Fibril Sedir Ağacı Islak Mendil 90'lı",
+        "item_category": "Islak Mendil"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.061001",
+        "action": "added",
+        "item_name": "Sütaş Süzme Yoğurt 750 G",
+        "item_category": "Süzme, Çeşnili Yoğurt"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.067728",
+        "action": "added",
+        "item_name": "Bağdat Zerdeçal Toz 70 G",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.075167",
+        "action": "added",
+        "item_name": "Tahsildaroğlu Taze Tam Yağlı Dil Peyniri 200 G",
+        "item_category": "Yerli Yöresel Peynir"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.082992",
+        "action": "added",
+        "item_name": "Patates Kg",
+        "item_category": "Patates, Soğan, Sarımsak"
+    },
+    {
+        "timestamp": "2025-01-09T18:25:48.089226",
+        "action": "added",
+        "item_name": "Limon Kg",
+        "item_category": "Narenciye"
+    },
+    {
+        "timestamp": "2025-01-11T02:30:35.479167",
+        "action": "removed",
+        "item_name": "123",
+        "item_category": "Sebzeler"
+    },
+    {
+        "timestamp": "2025-01-11T02:30:54.867043",
+        "action": "added",
+        "item_name": "sumak",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:00.110306",
+        "action": "added",
+        "item_name": "isot",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:05.151156",
+        "action": "added",
+        "item_name": "köri",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:11.584752",
+        "action": "added",
+        "item_name": "Zerdeçal",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:15.851259",
+        "action": "removed",
+        "item_name": "Bağdat Toz Acı Biber 75 G",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:16.549441",
+        "action": "removed",
+        "item_name": "Bağdat Zerdeçal Toz 70 G",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:20.244259",
+        "action": "added",
+        "item_name": "Toz Acı Biber",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:25.697082",
+        "action": "added",
+        "item_name": "karabiber",
+        "item_category": "Baharat"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:33.470621",
+        "action": "added",
+        "item_name": "süzme yoğurt",
+        "item_category": "Süt Ürünleri"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:37.769427",
+        "action": "removed",
+        "item_name": "Peynir",
+        "item_category": "Süt Ürünleri"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:42.299907",
+        "action": "added",
+        "item_name": "kaşar peyniri",
+        "item_category": "Süt Ürünleri"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:50.523795",
+        "action": "added",
+        "item_name": "tavuk",
+        "item_category": "Et"
+    },
+    {
+        "timestamp": "2025-01-11T02:31:56.112539",
+        "action": "added",
+        "item_name": "ton balığı",
+        "item_category": "Et"
+    },
+    {
+        "timestamp": "2025-01-11T02:32:04.398494",
+        "action": "added",
+        "item_name": "biber",
+        "item_category": "Sebzeler"
+    },
+    {
+        "timestamp": "2025-01-11T02:32:07.539646",
+        "action": "added",
+        "item_name": "kırmızı biber",
+        "item_category": "Sebzeler"
+    },
+    {
+        "timestamp": "2025-01-11T02:42:24.837727",
+        "action": "removed",
+        "item_name": "Muz",
+        "item_category": "Meyveler"
+    },
+    {
+        "timestamp": "2025-01-11T02:42:29.256798",
+        "action": "removed",
+        "item_name": "kaşar peyniri",
+        "item_category": "Süt Ürünleri"
+    }
+]
