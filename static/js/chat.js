@@ -20,6 +20,26 @@ document.addEventListener('DOMContentLoaded', function () {
     moreDropdown.addEventListener('click', (e) => {
         e.stopPropagation();
     });
+
+    const leftPane = document.getElementById('leftPane');
+    const resizableHandle = document.getElementById('resizableHandle');
+    let isResizing = false;
+
+    resizableHandle.addEventListener('mousedown', function (e) {
+        isResizing = true;
+        document.body.classList.add('resizing');
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        if (!isResizing) return;
+        const newWidth = e.clientX;
+        leftPane.style.width = `${newWidth}px`;
+    });
+
+    document.addEventListener('mouseup', function () {
+        isResizing = false;
+        document.body.classList.remove('resizing');
+    });
 });
 
 // Initial input handler

@@ -232,3 +232,13 @@ aside {
     width: 250px; /* Set a fixed width for the left pane */
     flex-shrink: 0; /* Prevent the left pane from shrinking */
 }
+
+#resizableHandle {
+    cursor: col-resize;
+    background-color: rgba(55, 65, 81, 1);
+}
+
+body.resizing {
+    cursor: col-resize;
+    user-select: none;
+}

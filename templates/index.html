@@ -28,7 +28,7 @@
     <!-- Main Content Area -->
     <div class="flex flex-1">
         <!-- Sidebar -->
-        <aside class="w-64 bg-gray-800 h-full flex flex-col sticky top-0">
+        <aside class="w-64 bg-gray-800 h-full flex flex-col sticky top-0" id="leftPane">
             <div class="p-4 flex items-center space-x-2 sticky top-0 bg-gray-800 z-10">
                 <i class="fas fa-bars text-lg"></i>
                 <h1 class="text-lg font-semibold">B2Bot</h1>
@@ -44,7 +44,8 @@
                 </ul>
             </div>
         </aside>
-
+        <!-- Resizable Handle -->
+        <div id="resizableHandle" class="w-2 bg-gray-700 cursor-col-resize"></div>
         <!-- Chat Area -->
         <main class="flex-grow flex flex-col">
             <!-- Initial View (will be hidden after first message) -->
