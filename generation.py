@@ -1,7 +1,7 @@
 # app.py
-
-import logging
 import os
+import requests
+import logging
 from dotenv import load_dotenv
 from pydantic import BaseModel
 import google.generativeai as genai
@@ -27,38 +27,62 @@ class ConversationHistory(BaseModel):
     history: list
 
 
-def generate_system_prompt(
-    cuisine_type: str, recipe_type: str, fridge_items: dict
-) -> str:
-
-    if recipe_type == "Menü":
-        return f"""
-        Sen, verilen buzdolabı malzemelerine dayanarak {cuisine_type} mutfağından bir menü oluşturan yardımcı bir asistansın. 
-        Menüde ana yemek, meze, tatlı ve yan yemek isimleri ve kısa açıklamalar olmalı. Mutfağın tipine göre popüler ve bilinen yemek isimleri söyle. 
-        Her yemek ismi için sadece bir cümlelik kısa bir açıklama yaz. Tarif detaylarına girme. Sadece buzdolabından malzemeler kullan.
-        Olmayan malzemeyi kullanma. Yeterince malzeme yoksa az sayıda yemek önerebilirsin.
-        Buzdolabındaki malzemeler: {fridge_items}
-        """
+# Function to fetch fridge items from the fridge list app
+def fetch_fridge_items():
+    response = requests.get("http://localhost:5001/items")
+    if response.status_code == 200:
+        fridge_items = response.json()
+        items_list = ""
+        for ingredient in fridge_items.keys():
+            items_list += ingredient + "\n"
+            items_list += ",".join(fridge_items[ingredient]) + "\n"
+        return items_list
     else:
-        return f"""
-        Sen, verilen buzdolabı malzemelerine dayanarak {cuisine_type} mutfağından {recipe_type} yemek isimleri ve kısa açıklamalar oluşturan yardımcı bir asistansın. 
-        Mutfağın tipine göre popüler ve bilinen yemek isimleri söyle. Eğer malzemeler yeterince çeşitli ise maksimum 3 adet yemek ismi ve kısa açıklama oluşturabilirsin. 
-        Her yemek ismi için sadece bir cümlelik kısa bir açıklama yaz. Tarif detaylarına girme. Sadece buzdolabından malzemeler kullan.
-        Olmayan malzemeyi kullanma. Yeterince malzeme yoksa az sayıda yemek önerebilirsin.
-        Buzdolabındaki malzemeler: {fridge_items}
-        """
+        return {"error": "Failed to fetch fridge items"}
 
 
-def generate_recipes_chatgpt(prompt: str, system_prompt: str):
-    response = client.chat.completions.create(
-        model="gpt-4o-mini-2024-07-18",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt},
-        ],
-    )
-    content = response.choices[0].message.content
-    return content
+def get_system_prompt(fridge_items: dict) -> str:
+    return f"""Sen, mutfak ve yemek konusunda yardımcı olan bir asistansın. Aşağıdaki özelliklere sahipsin:
+
+1. Genel Sohbet: Yemek tarifleri, pişirme teknikleri ve mutfak tavsiyeleri hakkında sohbet edebilirsin.
+
+2. Yemek Önerileri: 
+   - Farklı mutfakların (Türk, İtalyan, Çin vb.) yemeklerini önerebilirsin
+   - Yemek türlerine göre (ana yemek, çorba, tatlı vb.) öneriler sunabilirsin
+   - Her öneride maksimum 3 yemek ve kısa açıklamalarını verirsin
+   - Sadece buzdolabındaki malzemeleri kullanarak öneriler yaparsın
+
+3. Menü Oluşturma:
+   - İstenilen mutfak türüne göre tam bir menü oluşturabilirsin
+   - Menüde ana yemek, meze, tatlı ve yan yemekler olabilir
+   - Sadece buzdolabındaki malzemeleri kullanırsın
+
+Buzdolabındaki mevcut malzemeler:
+{fridge_items}
+
+Cevaplarını kısa ve öz tut. Her yemek için bir cümlelik açıklama yeterlidir.
+Olmayan malzemeleri asla kullanma. Yeterli malzeme yoksa daha az sayıda öneri sun."""
+
+
+def generate_chat_response(
+    prompt: str, fridge_items: dict, conversation_history=None
+) -> str:
+    try:
+        system_prompt = get_system_prompt(fridge_items)
+        messages = [{"role": "system", "content": system_prompt}]
+
+        if conversation_history:
+            messages.extend(conversation_history)
+
+        messages.append({"role": "user", "content": prompt})
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini", messages=messages, temperature=0.7, max_tokens=500
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        logger.error(f"Error generating chat response: {str(e)}")
+        return "Sorry, I encountered an error. Please try again."
 
 
 def generate_recipes_gemini(prompt: str, system_prompt: str):
@@ -68,20 +92,6 @@ def generate_recipes_gemini(prompt: str, system_prompt: str):
     )
     content = model.generate_content(prompt).text
     return content
-
-
-def generate_recipes(fridge_items: dict, cuisine_type: str, recipe_type: str) -> str:
-    system_prompt = generate_system_prompt(cuisine_type, recipe_type, fridge_items)
-    prompt = f"Yeterince malzeme var ise, üç farklı(yoksa olduğu kadar) {recipe_type} türkçe yemek ismini, parantez içinde (orjinal ismini) ve kısa açıklama oluştur."
-    gemini_recipes = generate_recipes_gemini(prompt, system_prompt)
-    return f"## {cuisine_type} {recipe_type} Yemek İsimleri ve Açıklamaları\n\n{gemini_recipes}"
-
-
-def generate_menu(fridge_items: dict, cuisine_type: str) -> str:
-    system_prompt = generate_system_prompt(cuisine_type, "Menü", fridge_items)
-    prompt = "Bir menü oluştur."
-    gemini_menu = generate_recipes_gemini(prompt, system_prompt)
-    return f"## {cuisine_type} Menüsü\n\n{gemini_menu}"
 
 
 def generate_shopping_prompt(fridge_items: str, days: int) -> str:

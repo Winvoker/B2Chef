@@ -1,0 +1,234 @@
+.transition-all {
+    transition: all 0.3s ease-in-out;
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hidden {
+    display: none;
+}
+
+#chatContainer,
+#chatInput {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease-in-out;
+}
+
+#chatContainer.visible,
+#chatInput.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Add markdown styling */
+.markdown-content h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0.5em 0;
+}
+
+.markdown-content h2 {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 0.5em 0;
+}
+
+.markdown-content h3 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0.5em 0;
+}
+
+.markdown-content p {
+    margin: 0.5em 0;
+}
+
+.markdown-content ul {
+    list-style-type: disc;
+    margin-left: 1.5em;
+}
+
+.markdown-content ol {
+    list-style-type: decimal;
+    margin-left: 1.5em;
+}
+
+.markdown-content code {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+.markdown-content pre {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 1em;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+/* Message container styling */
+.message-container {
+    max-width: 80%;
+    width: fit-content;
+}
+
+.ai-message {
+    background-color: rgba(55, 65, 81, 1);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-right: 2rem;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.user-message {
+    background-color: rgba(55, 65, 81, 1);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-left: 2rem;
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* Add hover styles for message actions */
+.message-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.ai-message-container:hover .message-actions {
+    opacity: 1;
+}
+
+/* Always show actions for latest message */
+.ai-message-container.latest .message-actions {
+    opacity: 1;
+}
+
+/* Add styles for sticky elements */
+.sticky {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Thinking animation */
+.thinking {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.thinking span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #9CA3AF;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out;
+}
+
+.thinking span:nth-child(1) { animation-delay: -0.32s; }
+.thinking span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* Disable input while processing */
+.input-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Add styles for the history item controls */
+.chat-history-item {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-history-controls {
+    position: absolute;
+    right: 8px;
+    display: none;
+    gap: 8px;
+}
+
+.chat-history-item:hover .chat-history-controls {
+    display: flex;
+}
+
+.chat-history-controls button {
+    padding: 2px 6px;
+    background: transparent;
+    color: #9CA3AF;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.chat-history-controls button:hover {
+    color: #F3F4F6;
+}
+
+.hidden-chat {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+/* Dropdown menu styles */
+#moreDropdown {
+    transform-origin: top left;
+    transition: all 0.2s ease-in-out;
+    min-width: 200px;  /* Ensure minimum width */
+}
+
+#moreDropdown:not(.hidden) {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+#moreDropdown button {
+    transition: all 0.2s ease-in-out;
+}
+
+#moreDropdown button:hover {
+    background-color: rgba(55, 65, 81, 1);
+}
+
+.relative.inline-block {
+    position: relative;
+    display: inline-block;
+}
+
+.maintain-size {
+    flex: 1 !important;
+}
+
+aside {
+    width: 250px; /* Set a fixed width for the left pane */
+    flex-shrink: 0; /* Prevent the left pane from shrinking */
+}

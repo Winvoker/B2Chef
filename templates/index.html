@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2Bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="bg-gray-900 text-white h-screen flex flex-col">
+    <!-- Top Navigation Buttons -->
+    <div class="flex justify-center bg-gray-800 py-4 sticky top-0 z-10">
+        <button class="flex items-center bg-gray-700 text-green-400 px-4 py-2 rounded-lg mx-2 hover:bg-gray-600">
+            <i class="fas fa-utensils mr-2"></i> Kitchen LLM
+        </button>
+        <button class="flex items-center bg-gray-700 text-green-400 px-4 py-2 rounded-lg mx-2 hover:bg-gray-600">
+            <i class="fas fa-dice-d20 mr-2"></i> Dungeon Master
+        </button>
+        <button class="flex items-center bg-gray-700 text-green-400 px-4 py-2 rounded-lg mx-2 hover:bg-gray-600">
+            <i class="fas fa-cog mr-2"></i> Settings
+        </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-800 h-full flex flex-col sticky top-0">
+            <div class="p-4 flex items-center space-x-2 sticky top-0 bg-gray-800 z-10">
+                <i class="fas fa-bars text-lg"></i>
+                <h1 class="text-lg font-semibold">B2Bot</h1>
+            </div>
+            <div class="flex-grow overflow-y-auto">
+                <div class="p-4">
+                    <button onclick="resetToInitialView()" class="w-full bg-green-600 text-white rounded-lg p-2 mb-4">
+                        <i class="fas fa-plus mr-2"></i> New Chat
+                    </button>
+                </div>
+                <ul class="space-y-2 px-4" id="chatHistory">
+                    <!-- Conversations will be loaded here -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Chat Area -->
+        <main class="flex-grow flex flex-col">
+            <!-- Initial View (will be hidden after first message) -->
+            <div id="initialView" class="flex-grow flex flex-col items-center justify-center transition-all">
+                <h1 class="text-2xl font-semibold mb-6">Nasıl yardımcı olabilirim?</h1>
+                <div class="w-full max-w-2xl">
+                    <div class="flex items-center bg-gray-800 rounded-lg p-4">
+                        <input type="text" id="initialInput" placeholder="B2Bot uygulamasına ileti gönder"
+                            class="flex-grow bg-transparent text-white placeholder-gray-400 focus:outline-none">
+                        <div class="flex items-center space-x-4 ml-4">
+                            <i class="fas fa-paperclip text-gray-400"></i>
+                            <i class="fas fa-calendar-alt text-gray-400"></i>
+                            <i class="fas fa-globe text-gray-400"></i>
+                        </div>
+                        <button class="ml-4">
+                            <i class="fas fa-microphone text-white"></i>
+                        </button>
+                    </div>
+                    <div class="flex space-x-4 mt-4">
+                        <button
+                            class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-image mr-2"></i> Görsel
+                        </button>
+                        <button
+                            class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-magic mr-2"></i> Sürpriz
+                        </button>
+                        <button type="button" onclick="sendKitchenCommand('türk mutfağı', 'Menü')"
+                            class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-utensils mr-2"></i> Türk Menüsü
+                        </button>
+                        <button type="button" onclick="sendKitchenCommand('türk mutfağı', 'Ana Yemek')"
+                            class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-drumstick-bite mr-2"></i> Ana Yemek
+                        </button>
+
+                    </div>
+                    <div class="flex space-x-4 mt-4">
+
+                        <button type="button" onclick="sendKitchenCommand('türk mutfağı', 'Tatlı')"
+                            class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-cookie mr-2"></i> Tatlı
+                        </button>
+                        </button> <button id="moreButton"
+                            class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-ellipsis-h mr-2"></i> Daha fazla
+                        </button>
+                        <div id="moreDropdown"
+                            class="hidden absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
+                            <div class="py-1">
+                                <button onclick="sendKitchenCommand('türk mutfağı', 'Çorba')"
+                                    class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
+                                    <i class="fas fa-soup mr-2"></i> Çorba
+                                </button>
+                                <button onclick="sendKitchenCommand('türk mutfağı', 'Salata')"
+                                    class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
+                                    <i class="fas fa-leaf mr-2"></i> Salata
+                                </button>
+                                <button onclick="sendKitchenCommand('türk mutfağı', 'İçecek')"
+                                    class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
+                                    <i class="fas fa-glass-martini mr-2"></i> İçecek
+                                </button>
+                                <button onclick="sendKitchenCommand('türk mutfağı', 'Kahvaltı')"
+                                    class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
+                                    <i class="fas fa-egg mr-2"></i> Kahvaltı
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Container (initially hidden) -->
+            <div id="chatContainer" class="flex-grow overflow-y-auto p-4 space-y-4 hidden">
+                <!-- Messages will be added here -->
+                <div class="flex items-center space-x-2 text-gray-400 text-sm mt-2 message-actions">
+                    <!-- ...existing code... -->
+                    <i class="fas fa-sync-alt cursor-pointer" onclick="retryMessage(this)"></i>
+                </div>
+            </div>
+
+            <!-- Input Area (initially hidden) -->
+            <div id="chatInput" class="p-4 border-t border-gray-700 hidden">
+                <form id="chatForm" class="flex items-center space-x-4">
+                    <input type="text" id="messageInput" placeholder="B2Bot uygulamasına ileti gönder"
+                        class="flex-grow bg-gray-800 text-white p-4 rounded-lg">
+                    <button type="button" class="text-gray-400"><i class="fas fa-paperclip"></i></button>
+                    <button type="button" class="text-gray-400"><i class="fas fa-calendar-alt"></i></button>
+                    <button type="button" class="text-gray-400"><i class="fas fa-microphone"></i></button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+
+</html>
