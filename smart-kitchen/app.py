@@ -20,6 +20,7 @@ fridge_items = {
     "Baharat": ["Bağdat Toz Acı Biber 75 G", "Bağdat Zerdeçal Toz 70 G"],
     "İçecekler": ["Kola"],
     "Tahıllar": ["Pirinç", "Bulgur"],
+    "Diğer": [],
 }
 
 
@@ -219,4 +220,4 @@ def get_all_items():
 add_latest_migros_item()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
