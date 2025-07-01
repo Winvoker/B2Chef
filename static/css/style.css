@@ -224,21 +224,49 @@
     display: inline-block;
 }
 
-.maintain-size {
-    flex: 1 !important;
-}
-
-aside {
-    width: 250px; /* Set a fixed width for the left pane */
-    flex-shrink: 0; /* Prevent the left pane from shrinking */
+#mainContainer {
+    height: calc(100vh - 80px); /* Adjust for top navigation */
 }
 
 #resizableHandle {
     cursor: col-resize;
     background-color: rgba(55, 65, 81, 1);
+    width: 2px;
 }
 
 body.resizing {
     cursor: col-resize;
     user-select: none;
+}
+
+/* Prevent sidebar width changes during conversation switching */
+#leftPane {
+    transition: none !important;
+}
+
+/* Ensure sidebar maintains its width during all operations */
+.maintain-sidebar-width {
+    width: inherit !important;
+    flex-basis: auto !important;
+}
+
+/* Streaming message styles */
+.streaming .cursor {
+    animation: blink 1s infinite;
+    color: #10B981;
+    font-weight: bold;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.streaming-content {
+    word-wrap: break-word;
+}
+
+.streaming .ai-message {
+    border-left: 3px solid #10B981;
+    background-color: rgba(16, 185, 129, 0.1);
 }

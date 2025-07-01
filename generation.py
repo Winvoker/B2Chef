@@ -85,6 +85,39 @@ def generate_chat_response(
         return "Sorry, I encountered an error. Please try again."
 
 
+def generate_chat_response_stream(
+    prompt: str, fridge_items: dict, conversation_history=None
+):
+    """
+    ChatGPT'den streaming response alır
+    """
+    try:
+        system_prompt = get_system_prompt(fridge_items)
+        messages = [{"role": "system", "content": system_prompt}]
+
+        if conversation_history:
+            messages.extend(conversation_history)
+
+        messages.append({"role": "user", "content": prompt})
+
+        # Stream=True ile ChatGPT'den streaming response al
+        stream = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            temperature=0.7,
+            max_tokens=500,
+            stream=True,
+        )
+
+        for chunk in stream:
+            if chunk.choices[0].delta.content is not None:
+                yield chunk.choices[0].delta.content
+
+    except Exception as e:
+        logger.error(f"Error generating streaming chat response: {str(e)}")
+        yield "Sorry, I encountered an error. Please try again."
+
+
 def generate_recipes_gemini(prompt: str, system_prompt: str):
     model = genai.GenerativeModel(
         model_name="gemini-1.5-flash",

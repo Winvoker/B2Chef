@@ -1,0 +1,8 @@
+# ...existing code...
+
+# PostgreSQL data
+postgres/data/
+
+.env/
+__pycache__/
+flask_session/

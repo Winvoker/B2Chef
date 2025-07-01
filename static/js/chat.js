@@ -28,12 +28,23 @@ document.addEventListener('DOMContentLoaded', function () {
     resizableHandle.addEventListener('mousedown', function (e) {
         isResizing = true;
         document.body.classList.add('resizing');
+        e.preventDefault();
     });
 
     document.addEventListener('mousemove', function (e) {
         if (!isResizing) return;
-        const newWidth = e.clientX;
+
+        const minWidth = 200;
+        const maxWidth = 500;
+        let newWidth = e.clientX;
+
+        // Constrain width between min and max
+        newWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+
+        // Update sidebar width with all CSS properties
         leftPane.style.width = `${newWidth}px`;
+        leftPane.style.minWidth = `${newWidth}px`;
+        leftPane.style.maxWidth = `${Math.max(newWidth, 500)}px`;
     });
 
     document.addEventListener('mouseup', function () {
@@ -49,6 +60,8 @@ document.getElementById('initialInput').addEventListener('keypress', async funct
         const message = this.value.trim();
         if (message) {
             this.value = '';
+            // Ensure we start a new conversation
+            currentConversationId = null;
             conversationHistory = [];
             const initialView = document.getElementById('initialView');
             const chatContainer = document.getElementById('chatContainer');
@@ -154,22 +167,86 @@ async function handleChatMessage(message) {
 }
 
 async function sendRequest(message) {
-    const response = await fetch('/generate_recipes', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            prompt: message,
-            conversation_id: currentConversationId
-        })
-    });
+    // Use streaming instead of regular request
+    return await sendStreamingRequest(message);
+}
 
-    if (!response.ok) throw new Error('Network response was not ok');
-    const data = await response.json();
-    currentConversationId = data.conversation_id;
-    loadConversations();
-    return data;
+async function sendStreamingRequest(message) {
+    return new Promise((resolve, reject) => {
+        fetch('/generate_recipes_stream', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt: message,
+                conversation_id: currentConversationId,
+                history: conversationHistory
+            })
+        }).then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            let aiMessageElement = null;
+            let fullResponse = '';
+
+            function readStream() {
+                reader.read().then(({ done, value }) => {
+                    if (done) {
+                        loadConversations();
+                        resolve({ response: fullResponse, conversation_id: currentConversationId });
+                        return;
+                    }
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+
+                                if (data.type === 'conversation_id') {
+                                    currentConversationId = data.conversation_id;
+                                } else if (data.type === 'content') {
+                                    if (!aiMessageElement) {
+                                        // Create AI message element on first content
+                                        aiMessageElement = createStreamingAIMessage();
+                                    }
+                                    fullResponse += data.content;
+                                    updateStreamingMessage(aiMessageElement, fullResponse);
+                                } else if (data.type === 'done') {
+                                    conversationHistory.push({ role: "assistant", content: fullResponse });
+                                    if (aiMessageElement) {
+                                        aiMessageElement.classList.remove('streaming');
+                                        // Remove the cursor when streaming is done
+                                        const cursor = aiMessageElement.querySelector('.cursor');
+                                        if (cursor) {
+                                            cursor.remove();
+                                        }
+                                        // Now parse markdown for the final content
+                                        updateStreamingMessage(aiMessageElement, fullResponse);
+                                    }
+                                } else if (data.type === 'error') {
+                                    reject(new Error(data.error));
+                                    return;
+                                }
+                            } catch (e) {
+                                console.error('Error parsing SSE data:', e);
+                            }
+                        }
+                    }
+
+                    readStream();
+                }).catch(reject);
+            }
+
+            readStream();
+        }).catch(reject);
+    });
 }
 
 async function sendRequestWithHistory(previousMessages) {
@@ -199,32 +276,25 @@ async function sendRequestWithHistory(previousMessages) {
 async function sendKitchenCommand(cuisine, recipeType) {
     try {
         const userMessage = `${cuisine} ${recipeType} önerir misin?`;
-        if (!document.getElementById('initialView').classList.contains('hidden')) {
+        const isInitialView = !document.getElementById('initialView').classList.contains('hidden');
+
+        if (isInitialView) {
+            // If we're in initial view, start a new conversation
+            currentConversationId = null;
+            conversationHistory = [];
             switchToChat();
         }
+
         addMessage('user', userMessage);
         conversationHistory.push({ role: "user", content: userMessage });
         disableInput();
         const loadingId = Date.now();
         const chatContainer = document.getElementById('chatContainer');
         chatContainer.insertAdjacentHTML('beforeend', addThinkingMessage(loadingId));
-        const response = await fetch('/generate_recipes', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                prompt: userMessage,
-                conversation_id: currentConversationId,
-                history: conversationHistory
-            })
-        });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        const loadingMessage = document.querySelector(`[data-message-id="${loadingId}"]`);
-        if (loadingMessage) loadingMessage.remove();
-        conversationHistory.push({ role: "assistant", content: data.response });
-        addMessage('ai', data.response);
+
+        // Use streaming request instead of regular fetch
+        const response = await sendStreamingRequest(userMessage);
+        currentConversationId = response.conversation_id;
         await loadConversations(); // Ensure chat history is updated
     } catch (error) {
         console.error('Error:', error);
@@ -235,10 +305,17 @@ async function sendKitchenCommand(cuisine, recipeType) {
 }
 
 function handleApiResponse(data, loadingId) {
+    // For streaming, the loading message is already removed and content is already added
+    // This function now mainly handles non-streaming responses (if any)
     const loadingMessage = document.querySelector(`[data-message-id="${loadingId}"]`);
-    if (loadingMessage) loadingMessage.remove();
-    conversationHistory.push({ role: "assistant", content: data.response });
-    addMessage('ai', data.response);
+    if (loadingMessage) {
+        loadingMessage.remove();
+        // Only add message if it wasn't already handled by streaming
+        if (data.response && !document.querySelector('.streaming')) {
+            conversationHistory.push({ role: "assistant", content: data.response });
+            addMessage('ai', data.response);
+        }
+    }
 }
 
 function handleApiError(error, loadingId) {
@@ -277,6 +354,12 @@ function resetToInitialView() {
     const chatContainer = document.getElementById('chatContainer');
     const chatInput = document.getElementById('chatInput');
 
+    // Clear current conversation ID to ensure new conversation is created
+    currentConversationId = null;
+
+    // Clear conversation history
+    conversationHistory = [];
+
     // Clear chat container
     chatContainer.innerHTML = '';
 
@@ -299,9 +382,6 @@ function resetToInitialView() {
         // Focus on initial input
         document.getElementById('initialInput').focus();
     }, 300);
-
-    // Save the conversation state
-    saveConversationState();
 }
 
 async function saveConversationState() {
@@ -494,10 +574,7 @@ async function loadConversation(conversationId) {
             addMessage(msg.role, msg.content);
         });
         currentConversationId = conversationId;
-        const leftPane = document.getElementById('leftPane');
-        if (leftPane) {
-            leftPane.classList.add('maintain-size'); // Ensure left pane size is maintained
-        }
+
         // Save the conversation state
         saveConversationState();
     } catch (error) {
@@ -526,6 +603,56 @@ async function handleRetryMessage(previousMessages) {
     } finally {
         enableInput();
     }
+}
+
+function createStreamingAIMessage() {
+    const chatContainer = document.getElementById('chatContainer');
+
+    // Remove any existing loading message
+    const existingLoading = chatContainer.querySelector('[data-message-id]');
+    if (existingLoading) {
+        existingLoading.remove();
+    }
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'flex items-start space-x-4 streaming';
+    messageDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-gray-500 flex-shrink-0"></div>
+        <div class="message-container ai-message-container latest">
+            <div class="ai-message markdown-content">
+                <span class="streaming-content"></span><span class="cursor">|</span>
+            </div>
+        </div>
+    `;
+
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    return messageDiv;
+}
+
+function updateStreamingMessage(messageElement, content) {
+    const contentSpan = messageElement.querySelector('.streaming-content');
+    const cursor = messageElement.querySelector('.cursor');
+
+    if (contentSpan) {
+        // For streaming, just use plain text to avoid markdown parsing issues
+        // We'll parse markdown when streaming is complete
+        if (messageElement.classList.contains('streaming')) {
+            contentSpan.textContent = content;
+        } else {
+            // Parse markdown only when streaming is complete
+            if (typeof marked !== 'undefined') {
+                contentSpan.innerHTML = marked.parse(content);
+            } else {
+                contentSpan.textContent = content;
+            }
+        }
+    }
+
+    // Auto-scroll to bottom
+    const chatContainer = document.getElementById('chatContainer');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 document.addEventListener('DOMContentLoaded', loadConversations);

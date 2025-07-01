@@ -26,9 +26,10 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="flex flex-1">
+    <div class="flex h-full" id="mainContainer">
         <!-- Sidebar -->
-        <aside class="w-64 bg-gray-800 h-full flex flex-col sticky top-0" id="leftPane">
+        <aside class="bg-gray-800 h-full flex flex-col sticky top-0" id="leftPane"
+            style="width: 256px; min-width: 256px; max-width: 500px; flex-shrink: 0;">
             <div class="p-4 flex items-center space-x-2 sticky top-0 bg-gray-800 z-10">
                 <i class="fas fa-bars text-lg"></i>
                 <h1 class="text-lg font-semibold">B2Bot</h1>
@@ -89,29 +90,31 @@
                             class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
                             <i class="fas fa-cookie mr-2"></i> Tatlı
                         </button>
-                        </button> <button id="moreButton"
-                            class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
-                            <i class="fas fa-ellipsis-h mr-2"></i> Daha fazla
-                        </button>
-                        <div id="moreDropdown"
-                            class="hidden absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
-                            <div class="py-1">
-                                <button onclick="sendKitchenCommand('türk mutfağı', 'Çorba')"
-                                    class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
-                                    <i class="fas fa-soup mr-2"></i> Çorba
-                                </button>
-                                <button onclick="sendKitchenCommand('türk mutfağı', 'Salata')"
-                                    class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
-                                    <i class="fas fa-leaf mr-2"></i> Salata
-                                </button>
-                                <button onclick="sendKitchenCommand('türk mutfağı', 'İçecek')"
-                                    class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
-                                    <i class="fas fa-glass-martini mr-2"></i> İçecek
-                                </button>
-                                <button onclick="sendKitchenCommand('türk mutfağı', 'Kahvaltı')"
-                                    class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
-                                    <i class="fas fa-egg mr-2"></i> Kahvaltı
-                                </button>
+                        <div class="relative">
+                            <button id="moreButton"
+                                class="flex items-center bg-gray-800 text-green-400 px-4 py-2 rounded-lg hover:bg-gray-700">
+                                <i class="fas fa-ellipsis-h mr-2"></i> Daha fazla
+                            </button>
+                            <div id="moreDropdown"
+                                class="hidden absolute top-full left-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
+                                <div class="py-1">
+                                    <button onclick="sendKitchenCommand('türk mutfağı', 'Çorba')"
+                                        class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
+                                        <i class="fas fa-mug-hot mr-2"></i>Çorba
+                                    </button>
+                                    <button onclick="sendKitchenCommand('türk mutfağı', 'Salata')"
+                                        class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
+                                        <i class="fas fa-leaf mr-2"></i>Salata
+                                    </button>
+                                    <button onclick="sendKitchenCommand('türk mutfağı', 'İçecek')"
+                                        class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
+                                        <i class="fas fa-glass-martini mr-2"></i>İçecek
+                                    </button>
+                                    <button onclick="sendKitchenCommand('türk mutfağı', 'Kahvaltı')"
+                                        class="w-full text-left px-4 py-2 text-green-400 hover:bg-gray-700">
+                                        <i class="fas fa-egg mr-2"></i>Kahvaltı
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

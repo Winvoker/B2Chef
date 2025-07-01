@@ -1,8 +1,13 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response, stream_template
 from flask_cors import CORS
 from models import db, Conversation, Message
-from generation import generate_chat_response, fetch_fridge_items
+from generation import (
+    generate_chat_response,
+    fetch_fridge_items,
+    generate_chat_response_stream,
+)
 import os
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -98,6 +103,81 @@ def generate():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/generate_recipes_stream", methods=["POST"])
+def generate_stream():
+    # Extract request data outside the generator to avoid context issues
+    data = request.json
+    prompt = data.get("prompt", "")
+    conversation_id = data.get("conversation_id")
+    history = data.get("history", [])
+
+    def stream_response():
+        with app.app_context():
+            try:
+                fridge_items = fetch_fridge_items()
+
+                # Get or create conversation
+                if conversation_id:
+                    conversation = Conversation.query.get(conversation_id)
+                else:
+                    # Create new conversation with first message as title
+                    conversation = Conversation(title=prompt[:100])
+                    db.session.add(conversation)
+                    db.session.commit()
+
+                # Save user message
+                user_message = Message(
+                    conversation_id=conversation.id, role="user", content=prompt
+                )
+                db.session.add(user_message)
+                db.session.commit()
+
+                # Send conversation_id first
+                yield f"data: {json.dumps({'type': 'conversation_id', 'conversation_id': conversation.id})}\n\n"
+
+                # Generate streaming response
+                conversation_history = history + [
+                    {"role": msg.role, "content": msg.content}
+                    for msg in conversation.messages
+                ]
+
+                full_response = ""
+                for chunk in generate_chat_response_stream(
+                    prompt, fridge_items, conversation_history
+                ):
+                    full_response += chunk
+                    # Send each chunk as SSE
+                    yield f"data: {json.dumps({'type': 'content', 'content': chunk})}\n\n"
+
+                # Save complete assistant message to database
+                assistant_message = Message(
+                    conversation_id=conversation.id,
+                    role="assistant",
+                    content=full_response,
+                )
+                db.session.add(assistant_message)
+                db.session.commit()
+
+                # Send completion signal
+                yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
+            except Exception as e:
+                try:
+                    db.session.rollback()
+                except:
+                    pass  # Ignore rollback errors if context is lost
+                yield f"data: {json.dumps({'type': 'error', 'error': str(e)})}\n\n"
+
+    return Response(
+        stream_response(),
+        mimetype="text/plain",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+        },
+    )
 
 
 # Add new endpoint for soft delete
