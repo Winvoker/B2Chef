@@ -55,7 +55,7 @@ def get_system_prompt(fridge_items: dict) -> str:
 3. Menü Oluşturma:
    - İstenilen mutfak türüne göre tam bir menü oluşturabilirsin
    - Menüde ana yemek, meze, tatlı ve yan yemekler olabilir
-   - Sadece buzdolabındaki malzemeleri kullanırsın
+   - Sadece buzdolabındaki malzemeleri kullanırsın ama yaratıcı olabilirsin. 
 
 Buzdolabındaki mevcut malzemeler:
 {fridge_items}

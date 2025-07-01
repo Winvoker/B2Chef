@@ -1,0 +1,9 @@
+/* Dropdown Components */
+
+#moreDropdown button {
+    transition: all 0.2s ease-in-out;
+}
+
+#moreDropdown button:hover {
+    background-color: rgba(55, 65, 81, 1);
+}

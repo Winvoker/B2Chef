@@ -1,0 +1,45 @@
+/* Layout Utilities */
+
+.sticky {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.relative.inline-block {
+    position: relative;
+    display: inline-block;
+}
+
+#mainContainer {
+    height: calc(100vh - 80px); /* Adjust for top navigation */
+}
+
+#resizableHandle {
+    cursor: col-resize;
+    background-color: rgba(55, 65, 81, 1);
+    width: 2px;
+}
+
+body.resizing {
+    cursor: col-resize;
+    user-select: none;
+}
+
+/* Prevent sidebar width changes during conversation switching */
+#leftPane {
+    transition: none !important;
+}
+
+/* Ensure sidebar maintains its width during all operations */
+.maintain-sidebar-width {
+    width: inherit !important;
+    flex-basis: auto !important;
+}
+
+/* Input states */
+.input-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

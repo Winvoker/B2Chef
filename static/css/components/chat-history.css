@@ -1,0 +1,37 @@
+/* Chat History Components */
+
+.chat-history-item {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-history-controls {
+    position: absolute;
+    right: 8px;
+    display: none;
+    gap: 8px;
+}
+
+.chat-history-item:hover .chat-history-controls {
+    display: flex;
+}
+
+.chat-history-controls button {
+    padding: 2px 6px;
+    background: transparent;
+    color: #9CA3AF;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.chat-history-controls button:hover {
+    color: #F3F4F6;
+}
+
+.hidden-chat {
+    opacity: 0.5;
+    text-decoration: line-through;
+}

@@ -1,0 +1,11 @@
+/* Main Styles - Modular CSS Architecture */
+
+/* Import utilities */
+@import url('./utilities/animations.css');
+@import url('./utilities/layout.css');
+
+/* Import components */
+@import url('./components/messages.css');
+@import url('./components/markdown.css');
+@import url('./components/chat-history.css');
+@import url('./components/dropdown.css');

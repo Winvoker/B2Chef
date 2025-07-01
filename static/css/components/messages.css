@@ -1,0 +1,50 @@
+/* Message Components */
+
+/* Message container styling */
+.message-container {
+    max-width: 80%;
+    width: fit-content;
+}
+
+.ai-message {
+    background-color: rgba(55, 65, 81, 1);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-right: 2rem;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.user-message {
+    background-color: rgba(55, 65, 81, 1);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-left: 2rem;
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* Message actions */
+.message-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.ai-message-container:hover .message-actions {
+    opacity: 1;
+}
+
+/* Always show actions for latest message */
+.ai-message-container.latest .message-actions {
+    opacity: 1;
+}
+
+/* Streaming message styles */
+.streaming-content {
+    word-wrap: break-word;
+}
+
+.streaming .ai-message {
+    border-left: 3px solid #10B981;
+    background-color: rgba(16, 185, 129, 0.1);
+}
